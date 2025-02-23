@@ -1,5 +1,5 @@
 ---
-title: Contact 
+title: Contact 🪶 
 name: Contact Us Form
 description: "You can use this form to contact me about speaking engagements, collaborations, or simply to say hello.
               I'm always excited to hear about your experiences with my projects and work, and I welcome any feedback on how they've been helpful to you and how they could be improved. Your insights are invaluable in shaping future endeavors and making my contributions more accessible and impactful"

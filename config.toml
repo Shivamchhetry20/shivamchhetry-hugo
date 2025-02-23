@@ -1,8 +1,8 @@
-baseURL = "https://www.example.org/"
+baseURL = "https://shivamchhetry.netlify.app"
 theme = "hugo-apero"
 languageCode = "en"
-title = "Hugo Apéro"
-author = "Alison Hill"
+title = "Shivam Chhetry"
+author = "Shivam Chhetry"
 copyright = "" # set to override the auto generated copyright using org info and now year
 googleAnalytics = ""
 #disqusShortname = "" # see params.comments to use utterances or giscus instead of Disqus
@@ -50,7 +50,7 @@ enableEmoji = true
   # use a built-in color theme
   # one of: earth / forest / grayscale / magma / paper / peach / plum /
   #         poppy / primer / sky / violet / water 
-  theme = "primer"
+  theme = "peach"
   
   # or, leave theme empty & make your own palette
   # see docs at https://hugo-apero.netlify.app/blog/color-themes/
@@ -104,34 +104,23 @@ enableEmoji = true
   # Icon pack "fab" includes brand icons, see: https://fontawesome.com/icons?d=gallery&s=brands&m=free
   # Icon pack "fas" includes solid icons, see: https://fontawesome.com/icons?d=gallery&s=solid&m=free
   # Icon pack "far" includes regular icons, see: https://fontawesome.com/icons?d=gallery&s=regular&m=free
+
+  [[params.social]]
+      icon      = "file-text" # icon name without the 'fa-'
+      icon_pack = "far"
+      url       = "https://drive.google.com/drive/u/0/my-drive"
   [[params.social]]
       icon      = "github" # icon name without the 'fa-'
       icon_pack = "fab"
-      url       = "https://github.com/apreshill/apero"
+      url       = "https://github.com/shivamchhetry20"
   [[params.social]]
-      icon      = "bluesky" # icon name without the 'fa-'
+      icon      = "linkedin-in" # icon name without the 'fa-'
       icon_pack = "fab"
-      url       = "https://bsky.app/"
+      url       = "https://linkedin.in/shivamkc01"
   [[params.social]]
       icon      = "instagram" # icon name without the 'fa-'
       icon_pack = "fab"
       url       = "https://www.instagram.com/explore/tags/apero/"
-  [[params.social]]
-      icon      = "x-twitter" # icon name without the 'fa-'
-      icon_pack = "fab"
-      url       = "https://twitter.com/hashtag/apéro"
-  [[params.social]]
-      icon      = "impactstory" # icon name without the 'fa-'
-      icon_pack = "ai"
-      url       = "https://impactstory.org/u/0000-0002-8082-1890"
-  [[params.social]]
-      icon      = "orcid" # icon name without the 'fa-'
-      icon_pack = "ai"
-      url       = "http://orcid.org/0000-0002-8082-1890"
-  [[params.social]]
-      icon      = "rss" # icon name without the 'fa-'
-      icon_pack = "fas"
-      url       = "/blog/index.xml"
 
 [taxonomies]
   category = "categories"

@@ -1,5 +1,5 @@
 ---
-title: Meeting People Where They R
+title: A Place for Thoughts & Ideas 🪶 
 description: |
   This is my blog where I practice sharing my curiosity about **Data science**.
   It includes **notes** and **tutorials** for my future self and hopefully also for you.
@@ -8,9 +8,9 @@ show_post_thumbnail: true
 thumbnail_left: true # for list-sidebar only
 show_author_byline: true
 show_post_date: true
-show_button_links: false
+show_button_links: true
 # for listing page layout
-layout: list-grid # list, list-sidebar, list-grid
+layout: list # list, list-sidebar, list-grid
 
 # for list-sidebar layout
 sidebar: 
@@ -22,7 +22,7 @@ sidebar:
     
     Check out the _index.md file in the /blog folder 
     to edit this content. 
-  author: "The R Markdown Team @RStudio"
+  author: "@shivamchhetry20"
   text_link_label: Subscribe via RSS
   text_link_url: /index.xml
   categories_link: true

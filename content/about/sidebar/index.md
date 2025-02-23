@@ -1,14 +1,14 @@
 ---
 ## Configure sidebar content in narrow column
 author: "Shivam Chhetry"
-role: "Data Scientist"
-avatar_shape: rounded # circle, square, rounded, leave blank to exclude
+role: "Data Scientist | Musician 🎶"
+avatar_shape: square # circle, square, rounded, leave blank to exclude
 show_social_links: true # specify social accounts in site config
 audio_link_label: "How to say my name" # leave blank to exclude
-link_list_label: "Interests" # bookmarks, elsewhere, etc.
+link_list_label: "Currently reading 🌻" # bookmarks, elsewhere, etc.
 link_list:
-- name: Paris
-  url: https://en.wikipedia.org/wiki/Paris
+- name: DeepSeek-R1
+  url:  https://arxiv.org/abs/2501.12948
 - name: Pastries
   url: https://en.wikipedia.org/wiki/Pastry
 - name: People

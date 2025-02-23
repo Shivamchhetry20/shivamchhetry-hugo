@@ -1,7 +1,7 @@
 ---
 title: "Shivam Chhetry"
 subtitle: "Data Scientist + Aspiring AI Researcher"
-description: "A dedicated **Data Scientist** with a fervent passion for unraveling hidden patterns, exploring data mining techniques, and delving into the realms of Machine Learning and Deep Learning."
+description: "A dedicated **Data Scientist** with a fervent passion for unraveling hidden patterns, exploring data mining techniques, and delving into the realms of **Machine Learning** and **Deep Learning**."
 images:
   - img/revoir.jpg
 image_left: false

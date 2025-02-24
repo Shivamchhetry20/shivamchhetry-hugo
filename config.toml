@@ -47,7 +47,7 @@ enableEmoji = true
   orgLocal = "Anywhere"
   description = "A modern, beautiful, and easily configurable blog theme for Hugo."
   favicon = "/img/website_icon.png"
-  logo = "/img/boy.png"
+  logo = "/img/new_logo.png"
   mainSections = ["blog", "project"]
   navallcaps = true
   # show/hide social icons in site header & footer
@@ -63,7 +63,7 @@ enableEmoji = true
   # use a built-in color theme
   # one of: earth / forest / grayscale / magma / paper / peach / plum /
   #         poppy / primer / sky / violet / water 
-  theme = "earth"
+  theme = "primer"
   
   # or, leave theme empty & make your own palette
   # see docs at https://hugo-apero.netlify.app/blog/color-themes/

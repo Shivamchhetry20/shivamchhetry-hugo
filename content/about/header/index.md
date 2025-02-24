@@ -3,10 +3,12 @@
 text_align_right: false
 show_title_as_headline: false
 headline: |
-  Hi, my name is Shivam Chhetry. Nice to meet you.
+  Hey 👋, I’m happy you’re here
 ---
 
-<!-- this is a subheadline -->
-I'm a Shivam Chhetry you'll want to hang out with. :fr: 
+**Thanks for stopping by!**
 
-The page you are reading is based on a markdown file- look in `content/about/` to edit. There, look inside the `header`, `main`, and `sidebar` folders to get started building your own "about" page.
+I’m a **Data Scientist** in the [**Apollo Hospital**](https://www.apollohospitals.com/bangalore/) My research interests include applications of **Deep Learning** and **AI**.
+
+I work on projects that use **Microbiology Lab** health record of data to explore which organisms with highly antibiotics with sensitive impact the mostly patient with the disease.
+<!-- this is a subheadline -->

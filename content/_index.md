@@ -5,12 +5,12 @@ description: "A dedicated **Data Scientist** with a fervent passion for unraveli
 images:
   - img/homepage_profile-new.png
 image_left: true
-text_align_left: true
+text_align_left: false
 show_social_links: true # specify social accounts in site config
 show_action_link: true
 action_link: /about
 action_label: "Read More &rarr;"
-action_type: text # text, button
+action_type: button # text, button
 type: home
 ---
 

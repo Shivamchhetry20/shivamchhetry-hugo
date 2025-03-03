@@ -6,41 +6,27 @@
     <description>Recent content in Categories on Shivam Chhetry</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 23 Feb 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 15 Dec 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Instance-Segmentation</title>
-      <link>http://localhost:1313/categories/instance-segmentation/</link>
-      <pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/categories/instance-segmentation/</guid>
+      <title>Data Analyst</title>
+      <link>http://localhost:1313/categories/data-analyst/</link>
+      <pubDate>Sun, 15 Dec 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/data-analyst/</guid>
       <description></description>
     </item>
     <item>
-      <title>Mask-Rcnn</title>
-      <link>http://localhost:1313/categories/mask-rcnn/</link>
-      <pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/categories/mask-rcnn/</guid>
+      <title>Database</title>
+      <link>http://localhost:1313/categories/database/</link>
+      <pubDate>Sun, 15 Dec 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/database/</guid>
       <description></description>
     </item>
     <item>
-      <title>Object-Detection</title>
-      <link>http://localhost:1313/categories/object-detection/</link>
-      <pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/categories/object-detection/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Pytorch</title>
-      <link>http://localhost:1313/categories/pytorch/</link>
-      <pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/categories/pytorch/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Tutorial</title>
-      <link>http://localhost:1313/categories/tutorial/</link>
-      <pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/categories/tutorial/</guid>
+      <title>SQL</title>
+      <link>http://localhost:1313/categories/sql/</link>
+      <pubDate>Sun, 15 Dec 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/sql/</guid>
       <description></description>
     </item>
     <item>

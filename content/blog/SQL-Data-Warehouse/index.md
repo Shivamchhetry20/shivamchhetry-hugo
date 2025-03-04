@@ -1,8 +1,7 @@
 ---
-title: "SQL for Data Warehouse from scratch"
+title: "<span style='color:#ff6600;'>SQL for Data Warehouse from scratch</span>"
 subtitle: "
-
-      When working on data analytics projects using SQL, there are three main stages to consider: **Data Warehousing, ExploratoruData Analysis (EDA), and Advanced Analytics**. Each stage builds on the previous one, helping you develop a strong foundation in SQL and data-driven decision-making."
+      When working on data analytics projects using SQL, there are three main stages to consider: Data Warehousing, ExploratoruData Analysis (EDA), and Advanced Analytics. Each stage builds on the previous one, helping you develop a strong foundation in SQL and data-driven decision-making."
 excerpt: "From Zero to Data Warehouse Hero: A Full SQL Project Walkthrough and Real Industry Experience!"
 date: 2024-12-15
 author: "Shiavam Chhetry"

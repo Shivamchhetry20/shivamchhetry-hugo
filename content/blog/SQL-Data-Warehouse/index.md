@@ -11,6 +11,423 @@ draft: false
 layout: single
 categories: [SQL, Database, Data Analyst]
 ---
+# Coding: Data Cleansing
+
+Epics: Build Silver Layer (https://www.notion.so/Build-Silver-Layer-1a9958bdbd8d81baa6abd707e1e1a67c?pvs=21)
+Status: Yes
+
+# **`Data Warehouse and Analytics Project`**
+
+Welcome to the**Data Warehouse and Analytics Project**
+
+This project demonstrates a comprehensive data warehousing and analytics solution, from building a data warehouse to generating actionable insights. Designed as a portfolio project, it highlights industry best practices in data engineering and analytics.
+
+---
+
+## 📖 Project Overview
+
+This project involves:
+
+1. **Data Architecture**: Designing a Modern Data Warehouse Using Medallion Architecture **Bronze**, **Silver**, and **Gold** layers.
+2. **ETL Pipelines**: Extracting, transforming, and loading data from source systems into the warehouse.
+3. **Data Modeling**: Developing fact and dimension tables optimized for analytical queries.
+4. **Analytics & Reporting**: Creating SQL-based reports and dashboards for actionable insights.
+
+🎯 This repository is an excellent resource for professionals and students looking to showcase expertise in:
+
+- SQL Development
+- Data Architect
+- Data Engineering
+- ETL Pipeline Developer
+- Data Modeling
+- Data Analytics
+
+---
+
+## 🛠️ Important Links & Tools:
+
+Everything is for Free!
+
+- [**Datasets](https://www.notion.so/datasets/):** Access to the project dataset (csv files).
+- [**SQL Server Express](https://www.microsoft.com/en-us/sql-server/sql-server-downloads):** Lightweight server for hosting your SQL database.
+- [**SQL Server Management Studio (SSMS)](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16):** GUI for managing and interacting with databases.
+- [**Git Repository](https://github.com/):** Set up a GitHub account and repository to manage, version, and collaborate on your code efficiently.
+- [**DrawIO](https://www.drawio.com/):** Design data architecture, models, flows, and diagrams.
+- [**Notion](https://www.notion.com/):** All-in-one tool for project management and organization.
+- [**Notion Project Steps](https://www.notion.so/16ed041640ef80489667cfe2f380b269?pvs=21):** Access to All Project Phases and Tasks.
+
+---
+
+## 🚀 Project Requirements
+
+### Building the Data Warehouse (Data Engineering)
+
+### Objective
+
+Develop a modern data warehouse using SQL Server to consolidate sales data, enabling analytical reporting and informed decision-making.
+
+### Specifications
+
+- **Data Sources**: Import data from two source systems (ERP and CRM) provided as CSV files.
+- **Data Quality**: Cleanse and resolve data quality issues prior to analysis.
+- **Integration**: Combine both sources into a single, user-friendly data model designed for analytical queries.
+- **Scope**: Focus on the latest dataset only; historization of data is not required.
+- **Documentation**: Provide clear documentation of the data model to support both business stakeholders and analytics teams.
+
+---
+
+### BI: Analytics & Reporting (Data Analysis)
+
+### Objective
+
+Develop SQL-based analytics to deliver detailed insights into:
+
+- **Customer Behavior**
+- **Product Performance**
+- **Sales Trends**
+
+These insights empower stakeholders with key business metrics, enabling strategic decision-making.
+
+For more details, refer to [docs/requirements.md](https://www.notion.so/docs/requirements.md).
+
+---
+
+## 🏗️ Data Architecture
+
+The data architecture for this project follows Medallion Architecture **Bronze** , **Silver**, and **Gold** layers:
+
+1. **Bronze Layer**: Stores raw data as-is from the source systems. Data is ingested from CSV Files into SQL Server Database.
+2. **Silver Layer**: This layer includes data cleansing, standardization, and normalization processes to prepare data for analysis.
+3. **Gold Layer**: Houses business-ready data modeled into a star schema required for reporting and analytics.
+
+![data_architecture.png](data_architecture.png)
+
+---
+
+## 📂 Repository Structure
+
+```
+data-warehouse-project/
+│
+├── datasets/                           # Raw datasets used for the project (ERP and CRM data)
+│
+├── docs/                               # Project documentation and architecture details
+│   ├── etl.drawio                      # Draw.io file shows all different techniquies and methods of ETL
+│   ├── data_architecture.drawio        # Draw.io file shows the project's architecture
+│   ├── data_catalog.md                 # Catalog of datasets, including field descriptions and metadata
+│   ├── data_flow.drawio                # Draw.io file for the data flow diagram
+│   ├── data_models.drawio              # Draw.io file for data models (star schema)
+│   ├── naming-conventions.md           # Consistent naming guidelines for tables, columns, and files
+│
+├── scripts/                            # SQL scripts for ETL and transformations
+│   ├── bronze/                         # Scripts for extracting and loading raw data
+│   ├── silver/                         # Scripts for cleaning and transforming data
+│   ├── gold/                           # Scripts for creating analytical models
+│
+├── tests/                              # Test scripts and quality files
+│
+├── README.md                           # Project overview and instructions
+├── LICENSE                             # License information for the repository
+├── .gitignore                          # Files and directories to be ignored by Git
+└── requirements.txt                    # Dependencies and requirements for the project
+
+```
+
+---
+
+Let’s start with building Data Warehouse 
+
+## Create Database and Schemas
+
+```sql
+/*
+=============================================================
+Create Database and Schemas
+=============================================================
+Script Purpose:
+    This script creates a new database named 'DataWarehouse' after checking if it already exists. 
+    If the database exists, it is dropped and recreated. Additionally, the script sets up three schemas 
+    within the database: 'bronze', 'silver', and 'gold'.
+	
+WARNING:
+    Running this script will drop the entire 'DataWarehouse' database if it exists. 
+    All data in the database will be permanently deleted. Proceed with caution 
+    and ensure you have proper backups before running this script.
+*/
+
+USE master;
+GO
+
+-- Drop and recreate the 'DataWarehouse' database
+IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'DataWarehouse')
+BEGIN
+    ALTER DATABASE DataWarehouse SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE DataWarehouse;
+END;
+GO
+
+-- Create the 'DataWarehouse' database
+CREATE DATABASE DataWarehouse;
+GO
+
+USE DataWarehouse;
+GO
+
+-- Create Schemas
+CREATE SCHEMA bronze;
+GO
+
+CREATE SCHEMA silver;
+GO
+
+CREATE SCHEMA gold;
+GO
+```
+
+# **Creating Bronze Tables: Understanding the SQL DDL Script**
+
+---
+
+In modern data architecture, it's common to define multiple stages in the data pipeline. These stages are often referred to as **bronze**, **silver**, and **gold**. The **bronze** layer typically contains raw, untransformed data, often loaded directly from source systems. The **silver** layer contains cleaned and processed data, and the **gold** layer represents data that has been fully aggregated and transformed for business reporting.
+
+This script is designed to create tables in the **bronze** schema, which is the first stage in our data processing pipeline. The `bronze` schema contains raw data that we can further process and refine in the later stages. Let's break down the purpose and functionality of the script step-by-step:
+
+---
+
+### **1. Checking and Dropping Existing Tables**
+
+Each table in the `bronze` schema is checked for existence before it is created. If a table already exists, it is dropped to ensure that the script can run without errors and the schema is defined from scratch.
+
+```sql
+IF OBJECT_ID('bronze.crm_cust_info', 'U') IS NOT NULL
+    DROP TABLE bronze.crm_cust_info;
+GO
+
+```
+
+The `OBJECT_ID` function checks whether a table with the specified name (`bronze.crm_cust_info` in this case) exists in the database. The `'U'` parameter specifies that we are looking for user-defined tables. If the table exists, it is dropped using the `DROP TABLE` statement.
+
+This same pattern is repeated for each table in the `bronze` schema.
+
+---
+
+### **2. Creating New Tables in the Bronze Schema**
+
+Once existing tables are dropped, new tables are created to hold the raw data in the `bronze` schema. These tables are designed with appropriate columns and data types to capture key information.
+
+### **Table: crm_cust_info**
+
+This table stores customer information such as customer ID, key, name, marital status, gender, and creation date.
+
+```sql
+CREATE TABLE bronze.crm_cust_info (
+    cst_id INT,
+    cst_key NVARCHAR(50),
+    cst_firstname NVARCHAR(50),
+    cst_lastname NVARCHAR(50),
+    cst_marital_status NVARCHAR(50),
+    cst_gndr NVARCHAR(50),
+    cst_create_date DATE
+);
+
+```
+
+- **cst_id**: A unique integer ID for each customer.
+- **cst_key**: A unique key representing the customer.
+- **cst_firstname** and **cst_lastname**: The customer's first and last names.
+- **cst_marital_status** and **cst_gndr**: The customer's marital status and gender.
+- **cst_create_date**: The date the customer record was created.
+
+### **Table: crm_prd_info**
+
+This table stores product-related information, including product ID, key, name, cost, and sales timeline.
+
+```sql
+CREATE TABLE bronze.crm_prd_info (
+    prd_id INT,
+    prd_key NVARCHAR(50),
+    prd_nm NVARCHAR(50),
+    prd_cost INT,
+    prd_line NVARCHAR(50),
+    prd_start_dt DATETIME,
+    prd_end_dt DATETIME
+);
+
+```
+
+- **prd_id**: Unique product ID.
+- **prd_key**: Unique product key.
+- **prd_nm**: Product name.
+- **prd_cost**: The cost of the product.
+- **prd_line**: The product line or category.
+- **prd_start_dt** and **prd_end_dt**: The start and end dates for the product’s lifecycle.
+
+### **Table: crm_sales_details**
+
+This table stores sales order details, including order number, product key, customer ID, order dates, and sales quantities.
+
+```sql
+CREATE TABLE bronze.crm_sales_details (
+    sls_ord_num NVARCHAR(50),
+    sls_prd_key NVARCHAR(50),
+    sls_cust_id INT,
+    sls_order_dt INT,
+    sls_ship_dt INT,
+    sls_due_dt INT,
+    sls_sales INT,
+    sls_quantity INT,
+    sls_price INT
+);
+
+```
+
+- **sls_ord_num**: Sales order number.
+- **sls_prd_key**: The product key related to the sales order.
+- **sls_cust_id**: Customer ID who placed the order.
+- **sls_order_dt**, **sls_ship_dt**, **sls_due_dt**: Order, shipment, and due dates (all stored as integers, potentially representing dates in `YYYYMMDD` format).
+- **sls_sales**, **sls_quantity**, **sls_price**: Sales amount, quantity of products sold, and price for the product.
+
+### **Other Tables in the Bronze Schema**
+
+- **erp_loc_a101**: This table likely contains location data related to some entity, storing a country and its associated ID.
+
+```sql
+CREATE TABLE bronze.erp_loc_a101 (
+    cid NVARCHAR(50),
+    cntry NVARCHAR(50)
+);
+
+```
+
+- **erp_cust_az12**: This table seems to store basic customer information such as ID, birthdate, and gender.
+
+```sql
+CREATE TABLE bronze.erp_cust_az12 (
+    cid NVARCHAR(50),
+    bdate DATE,
+    gen NVARCHAR(50)
+);
+
+```
+
+- **erp_px_cat_g1v2**: This table likely holds product category and subcategory information for items in an ERP system.
+
+```sql
+CREATE TABLE bronze.erp_px_cat_g1v2 (
+    id NVARCHAR(50),
+    cat NVARCHAR(50),
+    subcat NVARCHAR(50),
+    maintenance NVARCHAR(50)
+);
+
+```
+
+---
+
+### **Why Drop Existing Tables?**
+
+Dropping the tables before creating new ones ensures that you don’t encounter issues if there have been schema changes or updates since the last time the script was run. This is especially useful in development or testing environments where you might need to refresh the schema frequently.
+
+In production environments, however, you might consider using migration strategies or version control for database schemas to avoid data loss.
+
+---
+
+### Here is the Full SQL script
+
+```sql
+/*
+===============================================================================
+DDL Script: Create Bronze Tables
+===============================================================================
+Script Purpose:
+    This script creates tables in the 'bronze' schema, dropping existing tables 
+    if they already exist.
+	  Run this script to re-define the DDL structure of 'bronze' Tables
+===============================================================================
+*/
+
+IF OBJECT_ID('bronze.crm_cust_info', 'U') IS NOT NULL
+    DROP TABLE bronze.crm_cust_info;
+GO
+
+CREATE TABLE bronze.crm_cust_info (
+    cst_id              INT,
+    cst_key             NVARCHAR(50),
+    cst_firstname       NVARCHAR(50),
+    cst_lastname        NVARCHAR(50),
+    cst_marital_status  NVARCHAR(50),
+    cst_gndr            NVARCHAR(50),
+    cst_create_date     DATE
+);
+GO
+
+IF OBJECT_ID('bronze.crm_prd_info', 'U') IS NOT NULL
+    DROP TABLE bronze.crm_prd_info;
+GO
+
+CREATE TABLE bronze.crm_prd_info (
+    prd_id       INT,
+    prd_key      NVARCHAR(50),
+    prd_nm       NVARCHAR(50),
+    prd_cost     INT,
+    prd_line     NVARCHAR(50),
+    prd_start_dt DATETIME,
+    prd_end_dt   DATETIME
+);
+GO
+
+IF OBJECT_ID('bronze.crm_sales_details', 'U') IS NOT NULL
+    DROP TABLE bronze.crm_sales_details;
+GO
+
+CREATE TABLE bronze.crm_sales_details (
+    sls_ord_num  NVARCHAR(50),
+    sls_prd_key  NVARCHAR(50),
+    sls_cust_id  INT,
+    sls_order_dt INT,
+    sls_ship_dt  INT,
+    sls_due_dt   INT,
+    sls_sales    INT,
+    sls_quantity INT,
+    sls_price    INT
+);
+GO
+
+IF OBJECT_ID('bronze.erp_loc_a101', 'U') IS NOT NULL
+    DROP TABLE bronze.erp_loc_a101;
+GO
+
+CREATE TABLE bronze.erp_loc_a101 (
+    cid    NVARCHAR(50),
+    cntry  NVARCHAR(50)
+);
+GO
+
+IF OBJECT_ID('bronze.erp_cust_az12', 'U') IS NOT NULL
+    DROP TABLE bronze.erp_cust_az12;
+GO
+
+CREATE TABLE bronze.erp_cust_az12 (
+    cid    NVARCHAR(50),
+    bdate  DATE,
+    gen    NVARCHAR(50)
+);
+GO
+
+IF OBJECT_ID('bronze.erp_px_cat_g1v2', 'U') IS NOT NULL
+    DROP TABLE bronze.erp_px_cat_g1v2;
+GO
+
+CREATE TABLE bronze.erp_px_cat_g1v2 (
+    id           NVARCHAR(50),
+    cat          NVARCHAR(50),
+    subcat       NVARCHAR(50),
+    maintenance  NVARCHAR(50)
+);
+GO
+```
+
+---
 
 ### Check for NULLs or Duplicates in Primary Key
 
@@ -911,13 +1328,1000 @@ CREATE TABLE silver.crm_prd_info (
 	prd_nm			NVARCHAR(50),
 	prd_cost		INT,
 	prd_line		NVARCHAR(50),
-		prd_start_dt	DATE,  -- CAST DATETIME to DATE
+	prd_start_dt	DATE,  -- CAST DATETIME to DATE
 	prd_end_dt		DATE,  -- CAST DATETIME to DATE
 	dwh_create_date DATETIME2 DEFAULT GETDATE()
 
 );
 ```
 
+Let’s Insert the clean crm_prd_info table into our silver layer.
+
 ```sql
+INSERT INTO silver.crm_prd_info (
+	prd_id,
+	cat_id,
+	prd_key,
+	prd_nm,
+	prd_cost,
+	prd_line,
+	prd_start_dt,
+	prd_end_dt
+	)
+
+SELECT
+	 prd_id
+	,REPLACE(SUBSTRING(prd_key, 1, 5), '-', '_') AS cat_id  -- Extract category ID
+	,SUBSTRING(prd_key,7, LEN(prd_key)) AS prd_key          -- Extract product key
+	,prd_nm
+	,ISNULL(prd_cost, 0) AS prd_cost
+	,CASE UPPER(TRIM(prd_line))
+		  WHEN 'M' THEN 'Mountain'
+		  WHEN 'R' THEN 'Road'
+		  WHEN 'S' THEN 'Other Sales'
+		  WHEN 'T' THEN 'Touring'
+		  ELSE 'n/a'
+	 END AS prd_line  -- Map product line codes to descriptive values
+	,CAST(prd_start_dt AS DATE) AS prd_start_dt
+	,CAST(LEAD(prd_start_dt) OVER (PARTITION BY prd_key ORDER BY prd_start_dt)-1 AS DATE) AS prd_end_dt  -- Calculate end date as one day before the next start date.
+FROM bronze.crm_prd_info;
 
 ```
+
+---
+
+## Build Silver Layer Clean & Load crm_sales_details
+
+Let’s first see the table 
+
+```sql
+SELECT sls_ord_num
+      ,sls_prd_key
+      ,sls_cust_id
+      ,sls_order_dt
+      ,sls_ship_dt
+      ,sls_due_dt
+      ,sls_sales
+      ,sls_quantity
+      ,sls_price
+FROM bronze.crm_sales_details
+
+```
+
+![Screenshot 2025-03-04 175952.png](Screenshot_2025-03-04_175952.png)
+
+Let’s take first column sls_ord_num check for unwanted spaces
+
+Now move one to sls_prd_key & sls_cust_id columns So here these column we will need to connect with **crm_prd_info** through **prd_key** and **crm_cust_info** table with cst_id
+
+So, we need to check by writing 
+
+```sql
+SELECT sls_ord_num
+      ,sls_prd_key
+      ,sls_cust_id
+      ,sls_order_dt
+      ,sls_ship_dt
+      ,sls_due_dt
+      ,sls_sales
+      ,sls_quantity
+      ,sls_price
+FROM bronze.crm_sales_details
+WHERE sls_prd_key NOT IN (SELECT prd_key FROM silver.crm_prd_info)
+
+-- Check for crm_cust_info table
+SELECT sls_ord_num
+      ,sls_prd_key
+      ,sls_cust_id
+      ,sls_order_dt
+      ,sls_ship_dt
+      ,sls_due_dt
+      ,sls_sales
+      ,sls_quantity
+      ,sls_price
+FROM bronze.crm_sales_details
+WHERE sls_cust_id NOT IN (SELECT cust_id FROM silver.crm_cust_info)
+```
+
+So, first three columns are perfect the next three date columns are not in date format.
+
+Here we have to convert the date from Integer —> Date (*Note: Negative numbers or zeros can’t be cast to a date*)
+
+We can check by writing below script
+
+```sql
+-- Check for Invalid Dates
+SELECT 
+	sls_order_dt
+FROM bronze.crm_sales_details
+WHERE sls_order_dt <= 0
+```
+
+![Screenshot 2025-03-04 181028.png](Screenshot_2025-03-04_181028.png)
+
+We can see we do have total 17 rows where where 0 are there which is not good but we can handle this issue by using **NULLIF( )** function
+
+NULLIF() —> Return NULL if two given values are equal; otherwise, it returns the first expression.
+
+Here is the code to convert 0 value to NULL
+
+```sql
+SELECT 
+	NULLIF(sls_order_dt,0) sls_order_dt
+FROM bronze.crm_sales_details
+WHERE sls_order_dt <=0
+```
+
+Now let’s see the value 
+
+![Screenshot 2025-03-04 181355.png](Screenshot_2025-03-04_181355.png)
+
+We can see the value are in integer format which we have to convert it to date format
+
+![Screenshot 2025-03-04 182227.png](Screenshot_2025-03-04_182227.png)
+
+In this scenario, the length of the date must be 8 more then length 8 is not a valid value let’s check
+
+```sql
+SELECT 
+	NULLIF(sls_order_dt,0) sls_order_dt
+FROM bronze.crm_sales_details
+WHERE sls_order_dt <=0 OR LEN(sls_order_dt) != 8
+```
+
+![Screenshot 2025-03-04 182914.png](Screenshot_2025-03-04_182914.png)
+
+Check for outliers by validating the boundaries of the date range
+
+Here are all checks that I have checked
+
+```sql
+SELECT 
+	NULLIF(sls_order_dt,0) sls_order_dt
+FROM bronze.crm_sales_details
+WHERE  sls_order_dt <= 0 
+	OR LEN(sls_order_dt) != 8
+	OR sls_order_dt > 20500101
+	OR sls_order_dt < 19000101
+```
+
+So, below are the steps we need to follow
+
+1. Convert all 0 or the value which not equal to 8 to NULL
+2. Typecasting Integer ——> Date format but in SQL we can’t cast Integer —> Date first we have to convert integer —> varchar —> Date
+
+Here is the script
+
+```sql
+SELECT sls_ord_num
+      ,sls_prd_key
+      ,sls_cust_id
+	    ,CASE WHEN sls_order_dt = 0 OR LEN(sls_order_dt) != 8 THEN NULL
+			      ELSE CAST(CAST(sls_order_dt AS VARCHAR) AS DATE)
+	     END AS sls_order_dt
+      ,sls_ship_dt
+      ,sls_due_dt
+      ,sls_sales
+      ,sls_quantity
+      ,sls_price
+FROM bronze.crm_sales_details
+```
+
+![Screenshot 2025-03-04 184728.png](Screenshot_2025-03-04_184728.png)
+
+As you can see our sls_order_dt data which was integer type has been converted to date format
+
+Similarly we can convert sls_ship_dt & sls_due_dt  value to Date format
+
+```sql
+SELECT sls_ord_num
+      ,sls_prd_key
+      ,sls_cust_id
+	    ,CASE WHEN sls_order_dt = 0 OR LEN(sls_order_dt) != 8 THEN NULL
+			      ELSE CAST(CAST(sls_order_dt AS VARCHAR) AS DATE)
+	     END AS sls_order_dt
+      ,CASE WHEN sls_ship_dt= 0 OR LEN(sls_ship_dt) != 8 THEN NULL
+			      ELSE CAST(CAST(sls_ship_dtAS VARCHAR) AS DATE)
+	     END AS sls_ship_dt
+      ,CASE WHEN sls_due_dt= 0 OR LEN(sls_due_dt) != 8 THEN NULL
+			      ELSE CAST(CAST(sls_due_dtAS VARCHAR) AS DATE)
+	     END AS sls_due_dt
+      ,sls_sales
+      ,sls_quantity
+      ,sls_price
+FROM bronze.crm_sales_details
+```
+
+Now let’s think deeper with the date related columns like **Order Date must always be earlier than the shipping Data or Due Date**
+
+Let’s check whether order_dt > ship_dt OR order_dt > due_dt
+
+```sql
+SELECT
+	* 
+FROM bronze.crm_sales_details
+WHERE sls_order_dt > sls_ship_dt OR sls_order_dt > sls_due_dt;
+```
+
+![Screenshot 2025-03-04 215505.png](Screenshot_2025-03-04_215505.png)
+
+## Check Data Consistency: Between Sales, Quantity, & Price
+
+- Sales = Quantity * Price
+- Values must not be NULL, Zero or Negative
+
+```sql
+SELECT
+	 sls_sales
+	,sls_quantity
+	,sls_price
+FROM bronze.crm_sales_details
+WHERE sls_sales != sls_quantity * sls_price
+	 OR sls_sales IS NULL OR sls_quantity IS NULL OR sls_price IS NULL
+	 OR sls_sales <=0 OR sls_quantity <=0 OR sls_price <=0
+ORDER BY sls_sales, sls_quantity, sls_price
+```
+
+![Screenshot 2025-03-04 220457.png](Screenshot_2025-03-04_220457.png)
+
+Above we can see in our database the sls_sales have NULL values and also the negative value and the Sales value is not correct because sales should come by multiply Quantity * Price
+
+Solutions:
+
+1. Data Issues will be fixed direct in source system
+2. Data issues has to be fixed in data warehouse
+
+Rules:
+
+- If Sales is negative, zero, or null, derive it using Quantity and Price.
+- If Price is zero or null, calculate it using Sales & Quantity.
+- If Price is negative, convert it to a positive value.
+
+```sql
+SELECT
+	 sls_sales AS old_sls_sales
+	,sls_quantity
+	,sls_price AS old_sls_price
+
+	,CASE WHEN sls_sales IS NULL OR sls_sales <=0 OR sls_sales != sls_quantity * ABS(sls_price)
+		  THEN sls_quantity * ABS(sls_price)
+		  ELSE sls_sales
+	 END AS new_sls_sales
+
+	,CASE WHEN sls_price IS NULL OR sls_price <=0
+		  THEN sls_sales / NULLIF(sls_quantity,0)
+		  ELSE sls_price
+	 END AS new_sls_price
+
+FROM bronze.crm_sales_details
+WHERE sls_sales != sls_quantity * sls_price
+	OR sls_sales IS NULL OR sls_quantity IS NULL OR sls_price IS NULL
+	OR sls_sales <=0 OR sls_quantity <=0 OR sls_price <=0
+ORDER BY sls_sales, sls_quantity, sls_price;
+```
+
+![Screenshot 2025-03-04 222106.png](Screenshot_2025-03-04_222106.png)
+
+We have done with cleaning the sales_data now we have to modify our column data types and insert into silver layer
+
+```sql
+INSERT INTO silver.crm_sales_details (
+	sls_ord_num,
+	sls_prd_key,
+	sls_cust_id,
+	sls_order_dt,
+	sls_ship_dt,
+	sls_due_dt,
+	sls_sales,
+	sls_quantity,
+	sls_price
+)
+
+SELECT sls_ord_num
+      ,sls_prd_key
+      ,sls_cust_id
+	  ,CASE WHEN sls_order_dt = 0 OR LEN(sls_order_dt) != 8 THEN NULL
+			ELSE CAST(CAST(sls_order_dt AS VARCHAR) AS DATE)
+	   END AS sls_order_dt
+	  ,CASE WHEN sls_ship_dt = 0 OR LEN(sls_ship_dt) != 8 THEN NULL
+			ELSE CAST(CAST(sls_ship_dt AS VARCHAR) AS DATE)
+	   END AS sls_ship_dt
+	  ,CASE WHEN sls_due_dt = 0 OR LEN(sls_due_dt) != 8 THEN NULL
+			ELSE CAST(CAST(sls_due_dt AS VARCHAR) AS DATE)
+	   END AS sls_due_dt
+	  ,CASE WHEN sls_sales IS NULL OR sls_sales <=0 OR sls_sales != sls_quantity * ABS(sls_price)
+		  THEN sls_quantity * ABS(sls_price)
+		  ELSE sls_sales
+	   END AS sls_sales
+	  ,sls_quantity
+	  ,CASE WHEN sls_price IS NULL OR sls_price <=0
+		  THEN sls_sales / NULLIF(sls_quantity,0)
+		  ELSE sls_price
+	   END AS sls_price
+FROM bronze.crm_sales_details
+
+```
+
+Now let’s see our final table which we have insert into silver.crm_sales_details
+
+```sql
+SELECT * FROM silver.crm_sales_details;
+```
+
+### Before Data Cleansing
+
+![Screenshot 2025-03-04 224006.png](Screenshot_2025-03-04_224006.png)
+
+### After Data Cleansing
+
+![Screenshot 2025-03-04 223833.png](Screenshot_2025-03-04_223833.png)
+
+---
+
+---
+
+# Build Silver Layer Clean & Load erp_cust_az12
+
+```sql
+SELECT 
+	 cid
+	,bdate
+	,gen
+FROM bronze.erp_cust_az12
+```
+
+![Screenshot 2025-03-04 230457.png](Screenshot_2025-03-04_230457.png)
+
+![Screenshot 2025-03-04 231340.png](Screenshot_2025-03-04_231340.png)
+
+Here to remove ‘NAS’ from the starting to keep the ‘AW00011000’ we can use LIKE function.
+
+```sql
+SELECT  
+	 CASE WHEN cid LIKE 'NAS%' THEN SUBSTRING(cid,4, LEN(cid)) 
+	      ELSE cid
+	 END cid
+	,bdate
+	,gen
+FROM bronze.erp_cust_az12
+```
+
+Now we can check whether there are any unmatched ID is there in crm_cust_info table
+
+```sql
+SELECT  
+	 CASE WHEN cid LIKE 'NAS%' THEN SUBSTRING(cid,4, LEN(cid)) 
+	      ELSE cid
+	 END cid
+	,bdate
+	,gen
+FROM bronze.erp_cust_az12
+WHERE CASE WHEN cid LIKE 'NAS%' THEN SUBSTRING(cid,4, LEN(cid)) ELSE cid
+	 END NOT IN ( 
+	 SELECT 
+		 DISTINCT cst_key 
+	 FROM silver.crm_cust_info
+);
+```
+
+After checking we can see we don’t have any unmatched cst_key which is a good sign
+
+Now we can also check that the birthday should don’t have dob in future years like 9999 which hasn’t come yet.
+
+```sql
+-- Identify Out-of-Range Dates
+
+SELECT DISTINCT bdate
+FROM bronze.erp_cust_az12
+WHERE bdate < '1924-01-01' OR bdate > GETDATE()
+```
+
+Let’s also check Standardization & Consistency of gen column
+
+```sql
+-- Data Standardization & Consistency
+SELECT DISTINCT gen
+FROM bronze.erp_cust_az12
+
+------------------------
+OUTPUT:
+	gen
+1 NULL
+2 F
+3 
+4 Male
+5 Female
+6 M
+```
+
+Above out we can we our **gen** values are not in multiple option like we have **NULL, F, Male, Female, M, space**
+
+So, we need to use CASE WHEN with TRIM() so whenever there will be (’F’ or ‘Female’) make it ‘Famale’ and same for ‘Male’
+
+```sql
+-- Data Standardization & Consistency
+SELECT 
+	,CASE WHEN UPPER(TRIM(gen)) IN ('F', 'FEMALE') THEN 'Female'
+		  WHEN UPPER(TRIM(gen)) IN ('M', 'MALE') THEN 'Male'
+		  ELSE 'n/a'
+	 END AS gen
+FROM bronze.erp_cust_az12
+```
+
+Old gen_table     —————————————————————————————————>
+
+### gen
+
+NULL
+
+F
+
+Male
+
+Female
+
+M
+
+New gen_table after standardization
+
+### gen
+
+n/a
+
+Female
+
+n/a
+
+Male
+
+Female
+
+Male
+
+Now we have finished cleaning the erp_cust_az12 table now let’s insert into silver layer
+
+```sql
+INSERT INTO silver.erp_cust_az12 (
+	cid,
+	bdate,
+	gen
+)
+
+SELECT  
+	 CASE WHEN cid LIKE 'NAS%' THEN SUBSTRING(cid,4, LEN(cid))    -- Remove 'NAS' prefix if present
+	      ELSE cid
+	 END cid
+	,CASE WHEN bdate > GETDATE() THEN NULL
+		  ELSE bdate   
+	 END AS bdate  -- Set future birthdates to NULL
+	,CASE WHEN UPPER(TRIM(gen)) IN ('F', 'FEMALE') THEN 'Female'
+		  WHEN UPPER(TRIM(gen)) IN ('M', 'MALE') THEN 'Male'
+		  ELSE 'n/a'  -- Handle the missing values
+	 END AS gen  -- Normalize gender values and handle unknown cases
+FROM bronze.erp_cust_az12;
+
+```
+
+Also do the Quality Check of the Silver Table
+
+---
+
+# Build Silver Layer Clean & Load erp_loc_a101
+
+So first lets see the table
+
+```sql
+SELECT 
+	cid,
+	cntry
+FROM bronze.erp_loc_a101;
+```
+
+![Screenshot 2025-03-05 181232.png](Screenshot_2025-03-05_181232.png)
+
+Let’s see the other table with which we can join the table
+
+```sql
+SELECT
+	cst_key
+FROM silver.crm_cust_info;
+```
+
+![Screenshot 2025-03-05 181500.png](Screenshot_2025-03-05_181500.png)
+
+We can see in the crm_cust_info table the cst_key column didn’t separated by ‘’-” but in the erp_loc_a101 table the cid have separated by “-” for an example 
+in cid → AW-00011015 but in cst_key —> AW00011015 so we need to remove “-” from cid column value
+
+We are going to use **REPLACE() to replace “-” with “”** 
+
+```sql
+SELECT
+	 REPLACE(cid, '-', '') AS cid
+	,cntry
+FROM bronze.erp_loc_a101
+```
+
+After it gets replaced we can check whether we could merge the table with silver.crm_cust_info table using cst_key column. I have checked it did work.
+
+```sql
+SELECT 
+	 REPLACE(cid, '-','') AS cid
+	,cntry
+FROM bronze.erp_loc_a101
+WHERE REPLACE(cid, '-','') NOT IN (
+SELECT cst_key FROM silver.crm_cust_info
+)
+```
+
+Now, after cid column is fixed let’s move on to cntry col let’s check first Unique value in the cntry
+
+```sql
+SELECT DISTINCT cntry
+FROM bronze.erp_loc_a101
+ORDER BY cntry
+
+```
+
+![Screenshot 2025-03-05 182434.png](Screenshot_2025-03-05_182434.png)
+
+Above we can we do have lot of unique values which is not good for Data standardization & Consistency
+
+Let’s handle this using CASE WHEN 
+
+```sql
+--- Using below CASE WHEN we can handle our issue
+CASE WHEN TRIM(cntry) = 'DE' THEN 'Germany'
+		  WHEN TRIM(cntry) IN ('US', 'USA') THEN 'United States'
+		  WHEN TRIM(cntry)= '' OR cntry IS NULL THEN 'n/a'
+		  ELSE cntry
+	 END AS cntry
+	 
+--- FULL code
+SELECT 
+	 REPLACE(cid, '-','') AS cid
+	,cntry
+	,CASE WHEN TRIM(cntry) = 'DE' THEN 'Germany'
+		  WHEN TRIM(cntry) IN ('US', 'USA') THEN 'United States'
+		  WHEN TRIM(cntry)= '' OR cntry IS NULL THEN 'n/a'
+		  ELSE cntry
+	 END AS cntry
+FROM bronze.erp_loc_a101
+
+```
+
+### Now we have done with this table let’s insert to silver layer
+
+```sql
+INSERT INTO silver.erp_loc_a101 (
+	cid,
+	cntry
+)
+SELECT 
+	 REPLACE(cid, '-','') AS cid
+	,CASE WHEN TRIM(cntry) = 'DE' THEN 'Germany'
+		  WHEN TRIM(cntry) IN ('US', 'USA') THEN 'United States'
+		  WHEN TRIM(cntry)= '' OR cntry IS NULL THEN 'n/a'
+		  ELSE cntry
+	 END AS cntry
+FROM bronze.erp_loc_a101
+```
+
+let’s recheck for Quality purpose. 
+
+---
+
+# Build Silver Layer Clean & Load erp_ex_cat_g1v2
+
+So first lets see the table
+
+```sql
+SELECT
+	id,
+	cat,
+	subcat,
+	maintenance
+FROM bronze.erp_px_cat_g1v2
+```
+
+![Screenshot 2025-03-05 184759.png](Screenshot_2025-03-05_184759.png)
+
+you can check the data quality using below code.
+
+```sql
+
+-- Check for unwanted spaces
+SELECT * FROM bronze.erp_px_cat_g1v2
+WHERE cat != TRIM(cat) OR subcat != TRIM(subcat) OR maintenance != TRIM(maintenance)
+
+-- Data Standardization & Consistency
+SELECT DISTINCT
+subcat
+FROM bronze.erp_px_cat_g1v2
+
+SELECT DISTINCT
+maintenance 
+FROM bronze.erp_px_cat_g1v2
+```
+
+I have everything is good so only thing is left to insert into silver layer
+
+```sql
+INSERT INTO silver.erp_px_cat_g1v2 (
+	id,
+	cat,
+	subcat,
+	maintenance
+)
+SELECT
+	id,
+	cat,
+	subcat,
+	maintenance
+FROM bronze.erp_px_cat_g1v2
+
+```
+
+### Using below you can check the Quality check for your silver layer.
+
+```sql
+/*
+===============================================================================
+Quality Checks
+===============================================================================
+Script Purpose:
+    This script performs various quality checks for data consistency, accuracy, 
+    and standardization across the 'silver' layer. It includes checks for:
+    - Null or duplicate primary keys.
+    - Unwanted spaces in string fields.
+    - Data standardization and consistency.
+    - Invalid date ranges and orders.
+    - Data consistency between related fields.
+
+Usage Notes:
+    - Run these checks after data loading Silver Layer.
+    - Investigate and resolve any discrepancies found during the checks.
+===============================================================================
+*/
+
+-- ====================================================================
+-- Checking 'silver.crm_cust_info'
+-- ====================================================================
+-- Check for NULLs or Duplicates in Primary Key
+-- Expectation: No Results
+SELECT 
+    cst_id,
+    COUNT(*) 
+FROM silver.crm_cust_info
+GROUP BY cst_id
+HAVING COUNT(*) > 1 OR cst_id IS NULL;
+
+-- Check for Unwanted Spaces
+-- Expectation: No Results
+SELECT 
+    cst_key 
+FROM silver.crm_cust_info
+WHERE cst_key != TRIM(cst_key);
+
+-- Data Standardization & Consistency
+SELECT DISTINCT 
+    cst_marital_status 
+FROM silver.crm_cust_info;
+
+-- ====================================================================
+-- Checking 'silver.crm_prd_info'
+-- ====================================================================
+-- Check for NULLs or Duplicates in Primary Key
+-- Expectation: No Results
+SELECT 
+    prd_id,
+    COUNT(*) 
+FROM silver.crm_prd_info
+GROUP BY prd_id
+HAVING COUNT(*) > 1 OR prd_id IS NULL;
+
+-- Check for Unwanted Spaces
+-- Expectation: No Results
+SELECT 
+    prd_nm 
+FROM silver.crm_prd_info
+WHERE prd_nm != TRIM(prd_nm);
+
+-- Check for NULLs or Negative Values in Cost
+-- Expectation: No Results
+SELECT 
+    prd_cost 
+FROM silver.crm_prd_info
+WHERE prd_cost < 0 OR prd_cost IS NULL;
+
+-- Data Standardization & Consistency
+SELECT DISTINCT 
+    prd_line 
+FROM silver.crm_prd_info;
+
+-- Check for Invalid Date Orders (Start Date > End Date)
+-- Expectation: No Results
+SELECT 
+    * 
+FROM silver.crm_prd_info
+WHERE prd_end_dt < prd_start_dt;
+
+-- ====================================================================
+-- Checking 'silver.crm_sales_details'
+-- ====================================================================
+-- Check for Invalid Dates
+-- Expectation: No Invalid Dates
+SELECT 
+    NULLIF(sls_due_dt, 0) AS sls_due_dt 
+FROM bronze.crm_sales_details
+WHERE sls_due_dt <= 0 
+    OR LEN(sls_due_dt) != 8 
+    OR sls_due_dt > 20500101 
+    OR sls_due_dt < 19000101;
+
+-- Check for Invalid Date Orders (Order Date > Shipping/Due Dates)
+-- Expectation: No Results
+SELECT 
+    * 
+FROM silver.crm_sales_details
+WHERE sls_order_dt > sls_ship_dt 
+   OR sls_order_dt > sls_due_dt;
+
+-- Check Data Consistency: Sales = Quantity * Price
+-- Expectation: No Results
+SELECT DISTINCT 
+    sls_sales,
+    sls_quantity,
+    sls_price 
+FROM silver.crm_sales_details
+WHERE sls_sales != sls_quantity * sls_price
+   OR sls_sales IS NULL 
+   OR sls_quantity IS NULL 
+   OR sls_price IS NULL
+   OR sls_sales <= 0 
+   OR sls_quantity <= 0 
+   OR sls_price <= 0
+ORDER BY sls_sales, sls_quantity, sls_price;
+
+-- ====================================================================
+-- Checking 'silver.erp_cust_az12'
+-- ====================================================================
+-- Identify Out-of-Range Dates
+-- Expectation: Birthdates between 1924-01-01 and Today
+SELECT DISTINCT 
+    bdate 
+FROM silver.erp_cust_az12
+WHERE bdate < '1924-01-01' 
+   OR bdate > GETDATE();
+
+-- Data Standardization & Consistency
+SELECT DISTINCT 
+    gen 
+FROM silver.erp_cust_az12;
+
+-- ====================================================================
+-- Checking 'silver.erp_loc_a101'
+-- ====================================================================
+-- Data Standardization & Consistency
+SELECT DISTINCT 
+    cntry 
+FROM silver.erp_loc_a101
+ORDER BY cntry;
+
+-- ====================================================================
+-- Checking 'silver.erp_px_cat_g1v2'
+-- ====================================================================
+-- Check for Unwanted Spaces
+-- Expectation: No Results
+SELECT 
+    * 
+FROM silver.erp_px_cat_g1v2
+WHERE cat != TRIM(cat) 
+   OR subcat != TRIM(subcat) 
+   OR maintenance != TRIM(maintenance);
+
+-- Data Standardization & Consistency
+SELECT DISTINCT 
+    maintenance 
+FROM silver.erp_px_cat_g1v2;
+```
+
+---
+
+---
+
+# `Build Gold Layer`
+
+## `Create Dimension Customers`
+
+![dimension_fact.drawio.png](dimension_fact.drawio.png)
+
+## **Explore the Business Objects**
+
+![data_integration.png](data_integration.png)
+
+[](https://www.notion.so)
+
+### Let’s build first customer table
+
+So, we need **crm_cust_info**, **erp_cust_az12** & **erp_loc_a101** tables in order to make it one customer table.
+
+First we see with which columns we can join with other table, here we can join **crm_cust_info** table with **erp_cust_az12** on **cst_id = cid** column and same **crm_cust_info** with **erp_loc_a101** on **cst_id = cid.** 
+
+![joings.drawio.png](joings.drawio.png)
+
+Let’s write a script to apply LEFT JOIN on tables:
+
+```sql
+SELECT
+	ci.cst_id,
+	ci.cst_key,
+	ci.cst_firstname,
+	ci.cst_lastname,
+	ci.cst_marital_status,
+	ci.cst_gndr,
+	ci.cst_create_date,
+	ca.bdate,
+	ca.gen,
+	la.cntry
+FROM silver.crm_cust_info AS ci
+LEFT JOIN silver.erp_cust_az12 AS ca
+	ON ci.cst_key = ca.cid
+LEFT JOIN silver.erp_loc_a101 AS la
+	ON ci.cst_key = la.cid
+
+```
+
+![Screenshot 2025-03-05 220003.png](Screenshot_2025-03-05_220003.png)
+
+> **TIP:  After Joining table, check if any duplicates were introduced by the join logic**
+> 
+
+Here how we can check the duplicates
+
+```sql
+
+SELECT 
+	cst_id, 
+	COUNT(*) 
+FROM (
+	SELECT
+		ci.cst_id,
+		ci.cst_key,
+		ci.cst_firstname,
+		ci.cst_lastname,
+		ci.cst_marital_status,
+		ci.cst_gndr,
+		ci.cst_create_date,
+		ca.bdate,
+		ca.gen,
+		la.cntry
+	FROM silver.crm_cust_info AS ci
+	LEFT JOIN silver.erp_cust_az12 AS ca
+		ON ci.cst_key = ca.cid
+	LEFT JOIN silver.erp_loc_a101 AS la
+		ON ci.cst_key = la.cid
+) t 
+GROUP BY cst_id
+HAVING COUNT(*) > 1
+
+-- We don't get any duplicates dataset which is a good thing.
+
+```
+
+Now, Let’s check the Gender as I can we have two columns related to customer gender let’s look into it.
+
+```sql
+SELECT DISTINCT
+	ci.cst_gndr,
+	ca.gen
+FROM silver.crm_cust_info AS ci
+	LEFT JOIN silver.erp_cust_az12 AS ca
+	ON ci.cst_key = ca.cid
+	LEFT JOIN silver.erp_loc_a101 AS la
+	ON ci.cst_key = la.cid
+ORDER 1,2
+```
+
+![Screenshot 2025-03-05 220437.png](Screenshot_2025-03-05_220437.png)
+
+As we can see sometimes we have different values and sometime NULL or n/a value and above NULL we got it from the Join table NULLs often come from joined tables! NULL will appear if SQL finds no match.
+
+```sql
+SELECT DISTINCT
+	ci.cst_gndr,
+	CASE WHEN ci.cst_gndr != 'n/a' THEN ci.cst_gndr 
+		 ELSE COALESCE(ca.gen, 'n/a')
+	END AS new_gndr
+FROM silver.crm_cust_info AS ci
+	LEFT JOIN silver.erp_cust_az12 AS ca
+	ON ci.cst_key = ca.cid
+	LEFT JOIN silver.erp_loc_a101 AS la
+	ON ci.cst_key = la.cid
+```
+
+Now let’s look into our new_gen col
+
+![image.png](image.png)
+
+### Now Rename columns to friendly, meaningful names
+
+**cst_id    —> customer_id**
+
+**cst_key —> customer_number**
+
+**cst_firstname —> fist_name**
+
+**cst_lastname —> last_name**
+
+**cntry —> country**
+
+**cst_marital_status —> marital_status**
+
+**bdate —> birth_date**
+
+**cst_create_date —> create_date**
+
+### General Principles:
+
+- **Naming Conventions: Use snake_case, with lowercase letters and underscores(_) to separate words.**
+- **Language: Use English for all names.**
+- **Avoid Reserved Words: Do not use SQL reserved words as object names.**
+
+### Sort the columns into logical groups to improve readability.
+
+```sql
+SELECT
+	ci.cst_key AS customer_number,
+	ci.cst_firstname AS first_name,
+	ci.cst_lastname AS last_name,
+	la.cntry AS country,
+	ci.cst_marital_status AS marital_status,
+	CASE WHEN ci.cst_gndr != 'n/a' THEN ci.cst_gndr 
+		 ELSE COALESCE(ca.gen, 'n/a')
+	END AS gender,
+	ca.bdate AS birthdate,
+	ci.cst_create_date AS create_date
+FROM silver.crm_cust_info AS ci
+	LEFT JOIN silver.erp_cust_az12 AS ca
+	ON ci.cst_key = ca.cid
+	LEFT JOIN silver.erp_loc_a101 AS la
+	ON ci.cst_key = la.cid
+```
+
+![Screenshot 2025-03-05 225118.png](Screenshot_2025-03-05_225118.png)
+
+Let’s add **`Surrogate Key`**
+
+System-generated unique identifier , assigned to each record in a table.
+
+- DDL-based generation.
+- Query-based using Window function (Row_Number)
+
+### Let’s create a view in gold layer
+
+```sql
+CREATE VIEW gold.dim_customers AS
+SELECT
+    ROW_NUMBER() OVER (ORDER BY cst_id) AS customer_key,
+	ci.cst_id AS customer_id,
+	ci.cst_key AS customer_number,
+	ci.cst_firstname AS first_name,
+	ci.cst_lastname AS last_name,
+	la.cntry AS country,
+	ci.cst_marital_status AS marital_status,
+	CASE WHEN ci.cst_gndr != 'n/a' THEN ci.cst_gndr 
+		 ELSE COALESCE(ca.gen, 'n/a')
+	END AS gender,
+	ca.bdate AS birthdate,
+	ci.cst_create_date AS create_date
+FROM silver.crm_cust_info AS ci
+	LEFT JOIN silver.erp_cust_az12 AS ca
+	ON ci.cst_key = ca.cid
+	LEFT JOIN silver.erp_loc_a101 AS la
+	ON ci.cst_key = la.cid
+	
+```
+
+### We have created successfully created the view table for dim_customer
+
+---

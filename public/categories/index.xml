@@ -6,33 +6,26 @@
     <description>Recent content in Categories on Shivam Chhetry</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 15 Dec 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 12 Nov 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Data Analyst</title>
-      <link>http://localhost:1313/categories/data-analyst/</link>
-      <pubDate>Sun, 15 Dec 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/categories/data-analyst/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Database</title>
-      <link>http://localhost:1313/categories/database/</link>
-      <pubDate>Sun, 15 Dec 2024 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/categories/database/</guid>
+      <title>Data Analysis</title>
+      <link>http://localhost:1313/categories/data-analysis/</link>
+      <pubDate>Tue, 12 Nov 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/categories/data-analysis/</guid>
       <description></description>
     </item>
     <item>
       <title>SQL</title>
       <link>http://localhost:1313/categories/sql/</link>
-      <pubDate>Sun, 15 Dec 2024 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 12 Nov 2024 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/categories/sql/</guid>
       <description></description>
     </item>
     <item>
       <title>Theme Features</title>
       <link>http://localhost:1313/categories/theme-features/</link>
-      <pubDate>Thu, 28 Jan 2021 00:00:00 +0000</pubDate>
+      <pubDate>Wed, 27 Jan 2021 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/categories/theme-features/</guid>
       <description></description>
     </item>

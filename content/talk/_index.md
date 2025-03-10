@@ -1,5 +1,5 @@
 ---
-title: Talks that Last
+title: Projects
 description: |
   This is a list for your talks, workshops, or other events with a time, date, and place.
 author: "The R Markdown Team @RStudio"
@@ -9,19 +9,14 @@ show_post_date: true
 show_post_time: true
 show_button_links: true
 # for listing page layout
-layout: list # list, list-sidebar
+layout: list-sidebar # list, list-sidebar
 
 # for list-sidebar layout
 sidebar: 
-  title: Talks that Last
+  title: Projects
   description: |
-    This is a list for your talks, workshops, or 
-    other events with a time, date, and place. 
-    Even this sidebar offers a ton of customizations.
-    
-    Check out the _index.md file in the /talk folder 
-    to edit this content. 
-  author: "The R Markdown Team @RStudio"
+    This is a collection of all the projects I have worked on. Each project showcases different tools, techniques, and solutions to real-world problems. Browse through to discover the diversity of my work and get inspired!
+  author: "Shivam Chhetry"
   text_link_label: Subscribe via RSS
   text_link_url: /talk/index.xml
   show_sidebar_adunit: false # show ad container

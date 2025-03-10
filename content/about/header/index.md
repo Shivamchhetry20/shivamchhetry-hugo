@@ -3,7 +3,7 @@
 text_align_right: false
 show_title_as_headline: false
 headline: |
-  Hey 👋, I’m happy you’re here
+  Hi!, I’m happy you’re here
 ---
 
 **Thanks for stopping by!**

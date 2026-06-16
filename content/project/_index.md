@@ -1,7 +1,7 @@
 ---
-title: A Project Portfolio To Grow
-description: "Give your projects a place to live online."
-author: "The R Markdown Team @RStudio"
+title: Projects
+description: "A collection of data engineering, machine learning, and developer tooling projects."
+author: "Shivam Chhetry"
 show_post_thumbnail: true
 show_author_byline: true
 show_post_date: false
@@ -11,14 +11,16 @@ layout: list-sidebar # list, list-sidebar, list-grid
 
 # for list-sidebar layout
 sidebar: 
-  title: A Sidebar for Your Projects
+  title: My Projects
   description: |
-    Projects can be anything!
-    Check out the _index.md file in the /project folder 
-    to edit this content.
-  author: "The R Markdown Team @RStudio"
-  text_link_label: ""
-  text_link_url: ""
+    Here you'll find projects spanning data engineering, 
+    machine learning, MLOps, and developer tooling.
+    
+    Each project links to the full source code on GitHub.
+    Feel free to explore, fork, or reach out!
+  author: "Shivam Chhetry"
+  text_link_label: "GitHub Profile"
+  text_link_url: "https://github.com/Shivamchhetry20"
   show_sidebar_adunit: false # show ad container
 
 # set up common front matter for all individual pages inside project/
